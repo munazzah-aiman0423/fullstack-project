@@ -1,17 +1,14 @@
 body {
-  background: #0b1020;
+  background: #0a0f2c;
   color: white;
   font-family: Arial;
   display: flex;
   justify-content: center;
-  margin-top: 80px;
+  padding-top: 60px;
 }
 
 .container {
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  width: 400px;
 }
 
 h1 {
@@ -19,22 +16,30 @@ h1 {
 }
 
 input {
+  width: 100%;
   padding: 12px;
+  margin: 10px 0;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
 }
 
 button {
+  width: 100%;
   padding: 12px;
-  border: none;
-  border-radius: 8px;
   background: #4caf50;
   color: white;
-  font-size: 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #45a049;
+  background: #43a047;
+}
+
+.user-card {
+  background: #1b2348;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
 }

@@ -1,24 +1,106 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import UserForm from './components/UserForm';
+import UserList from './components/UserList';
+import './App.css';
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [users, setUsers] = useState([]);
+  const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // GET USERS
+  const fetchUsers = async () => {
+    const res = await axios.get(
+      'http://localhost:5000/users'
+    );
+    setUsers(res.data);
+  };
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:5000")
-      .then((res) => {
-        setMessage(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        setMessage("Connection failed");
-      });
+    fetchUsers();
   }, []);
 
+  // UPDATE USER
+  const updateUser = async () => {
+    try {
+      setLoading(true);
+
+      await axios.put(
+        `http://localhost:5000/users/${editId}`,
+        {
+          name,
+          email
+        }
+      );
+
+      setName('');
+      setEmail('');
+      setEditId(null);
+      fetchUsers();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // DELETE USER
+  const deleteUser = async (id) => {
+    await axios.delete(
+      `http://localhost:5000/users/${id}`
+    );
+
+    fetchUsers();
+  };
+
+  // ADD USER
+  const addUser = async () => {
+    try {
+      setLoading(true);
+
+      await axios.post(
+        'http://localhost:5000/users',
+        {
+          name,
+          email
+        }
+      );
+
+      setName('');
+      setEmail('');
+      fetchUsers();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h1>{message}</h1>
+    <div className="container">
+      <h1>User CRUD App 🚀</h1>
+
+      <UserForm
+        name={name}
+        setName={setName}
+        email={email}
+        setEmail={setEmail}
+        addUser={addUser}
+        updateUser={updateUser}
+        editId={editId}
+        loading={loading}
+      />
+
+      <UserList
+        users={users}
+        setEditId={setEditId}
+        setName={setName}
+        setEmail={setEmail}
+        deleteUser={deleteUser}
+      />
     </div>
   );
 }
